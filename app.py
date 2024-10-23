@@ -17,40 +17,37 @@ import bleach
 from datetime import timezone
 import secrets
 from flask_wtf import FlaskForm
-import string
+from wtforms import StringField, PasswordField, FloatField, HiddenField
+from wtforms.validators import InputRequired, Length, Regexp, NumberRange
 
-class EmptyForm(FlaskForm):
-    pass
 app = Flask(__name__)
 
 # Enhanced Configuration
 app.config['SECRET_KEY'] = secrets.token_hex(32)  # 256-bit random key
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.instance_path, 'bank.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SESSION_COOKIE_SECURE'] = True
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Strict'
 app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(minutes=30)
 app.config['WTF_CSRF_TIME_LIMIT'] = 3600  # 1 hour CSRF token expiry
-app.config['WTF_CSRF_SSL_STRICT'] = True
+app.config['WTF_CSRF_SSL_STRICT'] = False
+app.config['SESSION_COOKIE_SECURE'] = False
+app.config['WTF_CSRF_ENABLED'] = False  # Temporarily disable CSRF for testing
+app.config['WTF_CSRF_SSL_STRICT'] = False
+app.config['SESSION_COOKIE_SECURE'] = False
+app.config['SESSION_COOKIE_HTTPONLY'] = False
+app.config['SESSION_COOKIE_SAMESITE'] = None
+
 
 csrf = CSRFProtect(app)
-
 
 # Security headers middleware
 @app.after_request
 def add_security_headers(response):
-    response.headers[
-        'Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';"
-    response.headers['X-Content-Type-Options'] = 'nosniff'
-    response.headers['X-Frame-Options'] = 'DENY'
-    response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
-    response.headers['X-XSS-Protection'] = '1; mode=block'
-    response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
-    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
-    response.headers['Pragma'] = 'no-cache'
+    response.headers.pop('Content-Security-Policy', None)
+    response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+    response.headers['Access-Control-Allow-Origin'] = '*'
     return response
-
 
 # Enhanced cookie security
 def set_secure_cookie(response, key, value, max_age=1800):
@@ -58,14 +55,12 @@ def set_secure_cookie(response, key, value, max_age=1800):
         key,
         value,
         max_age=max_age,
-        httponly=True,
-        secure=True,
-        samesite='Strict',
-        domain=request.host.split(':')[0],  # Only set for specific domain
-        path='/'  # Restrict to root path
+        httponly=False,
+        secure=False,
+        samesite=None,
+        path='/'
     )
     return response
-
 
 # Session management
 @app.before_request
@@ -78,7 +73,6 @@ def session_management():
             return redirect(url_for('login'))
 
     session['last_active'] = datetime.datetime.utcnow().isoformat()
-
 
 # Token blacklist for logged out tokens
 token_blacklist = set()
@@ -163,7 +157,7 @@ def init_db():
         db.create_all()  # Create all tables fresh
         app.logger.info("Database tables created successfully!")
 
-# Initialize database tables - replace your current db.create_all() block with this
+# Initialize database tables
 with app.app_context():
     try:
         # Try to query the User table to check if it needs updating
@@ -172,25 +166,57 @@ with app.app_context():
         app.logger.info("Database needs initialization")
         init_db()
 
+class RegistrationForm(FlaskForm):
+    csrf_token = HiddenField()
+    username = StringField('Username', validators=[
+        InputRequired(),
+        Length(min=4, max=25),
+        Regexp('^[a-zA-Z0-9_.-]+$', message='Invalid username format')
+    ])
+    password = PasswordField('Password', validators=[
+        InputRequired(),
+        Length(min=8)
+    ])
+
+class LoginForm(FlaskForm):
+    csrf_token = HiddenField()
+    username = StringField('Username', validators=[InputRequired()])
+    password = PasswordField('Password', validators=[InputRequired()])
+
+class TransactionForm(FlaskForm):
+    csrf_token = HiddenField()
+    action = HiddenField('Action', validators=[InputRequired()])
+    amount = FloatField('Amount', validators=[
+        InputRequired(),
+        NumberRange(min=0.01, max=10000, message='Amount must be between $0.01 and $10,000')
+    ])
+
+class EmptyForm(FlaskForm):
+    pass
+
 # Security Middleware
 @app.before_request
 def security_checks():
-    # Block suspicious IP ranges
-    blocked_ranges = ["1.0.", "192.168."]  # Add more as needed
-    if any(request.remote_addr.startswith(ip) for ip in blocked_ranges):
-        app.logger.warning(f'Blocked request from suspicious IP: {request.remote_addr}')
-        return "Access denied", 403
-
-    # Check for common attack patterns in URL
-    suspicious_patterns = [
-        r'\.\./', r'%2e%2e%2f', r'exec\(', r'eval\(',
-        r'union\s+select', r'concat\(', r'information_schema'
-    ]
-    url = request.url.lower()
-    if any(re.search(pattern, url) for pattern in suspicious_patterns):
-        app.logger.warning(f'Suspicious URL pattern detected: {url}')
-        return "Invalid request", 400
-
+    # # Allow localhost testing
+    # if request.remote_addr in ['127.0.0.1', '::1', 'localhost']:
+    #     return None
+    #
+    # # Rest of your security checks...
+    # blocked_ranges = ["1.0.", "192.168."]
+    # if any(request.remote_addr.startswith(ip) for ip in blocked_ranges):
+    #     app.logger.warning(f'Blocked request from suspicious IP: {request.remote_addr}')
+    #     return "Access denied", 403
+    #
+    # # Check for common attack patterns in URL
+    # suspicious_patterns = [
+    #     r'\.\./', r'%2e%2e%2f', r'exec\(', r'eval\(',
+    #     r'union\s+select', r'concat\(', r'information_schema'
+    # ]
+    # url = request.url.lower()
+    # if any(re.search(pattern, url) for pattern in suspicious_patterns):
+    #     app.logger.warning(f'Suspicious URL pattern detected: {url}')
+    #     return "Invalid request", 400
+    return None
 
 # Enhanced Token Decorator
 def token_required(f):
@@ -228,17 +254,13 @@ def token_required(f):
 
     return decorated
 
-
 @app.route('/register', methods=['GET', 'POST'])
-@limiter.limit("5 per minute")
+@limiter.limit("25 per minute")
 def register():
-    form = EmptyForm()
-    if request.method == 'POST':
-        if not form.validate_on_submit():
-            return jsonify({'error': 'Invalid CSRF token'}), 400
-
-        user = bleach.clean(request.form.get('username'))
-        password = request.form.get('password')
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = bleach.clean(form.username.data)
+        password = form.password.data
 
         if not user or not password:
             return jsonify({'error': 'Username and password required'}), 400
@@ -264,16 +286,18 @@ def register():
 
         app.logger.info(f'New user registered: {user} from IP: {request.remote_addr}')
         return redirect(url_for('login')), 302
+    elif request.method == 'POST':
+        return jsonify({'error': 'Invalid form submission'}), 400
 
     return render_template('register.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
-@limiter.limit("5 per minute")
+@limiter.limit("25 per minute")
 def login():
-    form = EmptyForm()
-    if request.method == 'POST' and form.validate():
-        user = bleach.clean(request.form.get('username'))
-        password = request.form.get('password')
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = bleach.clean(form.username.data)
+        password = form.password.data
 
         # Enhanced logging for potential attacks
         app.logger.info(f'Login attempt for user: {user} from IP: {request.remote_addr} User-Agent: {request.headers.get("User-Agent")}')
@@ -332,68 +356,72 @@ def login():
         set_secure_cookie(response, 'token', token)
         app.logger.info(f'Successful login for user: {user} from IP: {request.remote_addr}')
         return response
+    elif request.method == 'POST':
+        return jsonify({'error': 'Invalid form submission'}), 400
 
     return render_template('login.html', form=form)
 
 @app.route('/')
 @token_required
 def dashboard(current_user):
-    form = EmptyForm()
+    # form = EmptyForm()
     transactions = Transaction.query.filter_by(user_id=current_user.id) \
         .order_by(Transaction.timestamp.desc()) \
         .limit(10).all()
     return render_template('dashboard.html',
                          username=escape(current_user.name),
                          balance=current_user.balance,
-                         transactions=transactions,
-                         form=form)
+                         transactions=transactions)
 
 @app.route('/manage', methods=['POST'])
 @token_required
-@limiter.limit("10 per minute")
+@limiter.limit("30 per minute")
 def manage(current_user):
-    action = bleach.clean(request.form.get('action'))
-    amount = request.form.get('amount')
+    form = TransactionForm()
+    if form.validate_on_submit():
+        action = bleach.clean(form.action.data)
+        amount = form.amount.data
 
-    if not action or not amount:
-        return jsonify({'error': 'Action and amount required'}), 400
+        if not action or not amount:
+            return jsonify({'error': 'Action and amount required'}), 400
 
-    try:
-        amount = float(amount)
-        if not (0 < amount <= 10000):  # Reasonable transaction limit
-            raise ValueError
-    except ValueError:
-        return jsonify({'error': 'Invalid amount'}), 400
+        try:
+            amount = float(amount)
+            if not (0 < amount <= 10000):  # Reasonable transaction limit
+                raise ValueError
+        except ValueError:
+            return jsonify({'error': 'Invalid amount'}), 400
 
-    # Transaction handling with proper error checking
-    try:
-        if action == 'withdraw':
-            if current_user.balance < amount:
-                return jsonify({'error': 'Insufficient funds'}), 400
-            current_user.balance -= amount
-        elif action == 'deposit':
-            current_user.balance += amount
-        else:
-            return jsonify({'error': 'Invalid action'}), 400
+        # Transaction handling with proper error checking
+        try:
+            if action == 'withdraw':
+                if current_user.balance < amount:
+                    return jsonify({'error': 'Insufficient funds'}), 400
+                current_user.balance -= amount
+            elif action == 'deposit':
+                current_user.balance += amount
+            else:
+                return jsonify({'error': 'Invalid action'}), 400
 
-        # Record transaction
-        transaction = Transaction(
-            user_id=current_user.id,
-            type=action,
-            amount=amount,
-            ip_address=request.remote_addr
-        )
-        db.session.add(transaction)
-        db.session.commit()
+            # Record transaction
+            transaction = Transaction(
+                user_id=current_user.id,
+                type=action,
+                amount=amount,
+                ip_address=request.remote_addr
+            )
+            db.session.add(transaction)
+            db.session.commit()
 
-        app.logger.info(f'Successful {action} of {amount} for user: {current_user.name}')
-        return redirect(url_for('dashboard'))
+            app.logger.info(f'Successful {action} of {amount} for user: {current_user.name}')
+            return redirect(url_for('dashboard'))
 
-    except Exception as e:
-        db.session.rollback()
-        app.logger.error(f'Transaction failed: {str(e)}')
-        return jsonify({'error': 'Transaction failed'}), 500
-
+        except Exception as e:
+            db.session.rollback()
+            app.logger.error(f'Transaction failed: {str(e)}')
+            return jsonify({'error': 'Invalid transaction data'}), 400
+    else:
+        return jsonify({'error': 'Invalid form submission'}), 400
 
 @app.route('/logout')
 def logout():
@@ -409,11 +437,12 @@ def logout():
 def not_found_error(error):
     return render_template('404.html'), 404
 
-
 @app.errorhandler(500)
 def internal_error(error):
     db.session.rollback()
     return render_template('500.html'), 500
 
 if __name__ == '__main__':
-    app.run(ssl_context='adhoc', host='127.0.0.1', port=8080, debug=False)
+    # For testing purposes, run without SSL on port 5000
+    # Remember to switch back to SSL and secure settings in production
+    app.run(host='127.0.0.1', port=5000, debug=False)

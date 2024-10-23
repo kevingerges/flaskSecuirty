@@ -1,13 +1,47 @@
-2024-10-22 16:54:02,964 ERROR: Exception on /register [POST] [in /Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/flask/app.py:838]
-Traceback (most recent call last):
-  File "/Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
-    self.dialect.do_execute(
-  File "/Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
-    cursor.execute(statement, parameters)
-sqlite3.OperationalError: no such column: users.failed_login_attempts
-
-The above exception was the direct cause of the following exception:
-
+2024-10-22 19:12:26,401 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:12:26,424 INFO: Successful deposit of 100.0 for user: testuser1 [in /Users/kevingerges/Desktop/flaskProject/app.py:417]
+2024-10-22 19:12:26,431 INFO: Successful withdraw of 50.0 for user: testuser1 [in /Users/kevingerges/Desktop/flaskProject/app.py:417]
+2024-10-22 19:12:26,442 INFO: Login attempt for user: admin'-- from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:12:26,442 WARNING: Failed login attempt for user: admin'-- from IP: 127.0.0.1 [in /Users/kevingerges/Desktop/flaskProject/app.py:337]
+2024-10-22 19:12:26,454 INFO: Successful deposit of 100.0 for user: testuser1 [in /Users/kevingerges/Desktop/flaskProject/app.py:417]
+2024-10-22 19:16:35,262 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:16:35,336 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:16:35,342 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:16:35,349 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:16:35,355 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:16:35,361 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:16:35,367 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:16:35,373 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:16:35,378 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:16:35,409 INFO: Login attempt for user: admin'-- from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:16:35,409 WARNING: Failed login attempt for user: admin'-- from IP: 127.0.0.1 [in /Users/kevingerges/Desktop/flaskProject/app.py:337]
+2024-10-22 19:19:01,163 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:19:01,235 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:19:01,242 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:19:01,248 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:19:01,256 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:19:01,263 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:19:01,269 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:19:01,274 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:19:01,280 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:19:01,310 INFO: Login attempt for user: admin'-- from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:19:01,311 WARNING: Failed login attempt for user: admin'-- from IP: 127.0.0.1 [in /Users/kevingerges/Desktop/flaskProject/app.py:337]
+2024-10-22 19:19:35,515 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:19:35,589 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:19:35,595 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:19:35,601 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:19:35,607 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:19:35,614 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:19:35,620 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:19:35,625 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:19:35,630 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:19:35,659 INFO: Login attempt for user: admin'-- from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:19:35,660 WARNING: Failed login attempt for user: admin'-- from IP: 127.0.0.1 [in /Users/kevingerges/Desktop/flaskProject/app.py:337]
+2024-10-22 19:20:25,728 INFO: Bank application startup [in /Users/kevingerges/Desktop/flaskProject/app.py:96]
+2024-10-22 19:20:40,618 INFO: Bank application startup [in /Users/kevingerges/Desktop/flaskProject/app.py:96]
+2024-10-22 19:24:02,069 INFO: New user registered: tsdfjgesidfestuser from IP: 127.0.0.1 [in /Users/kevingerges/Desktop/flaskProject/app.py:287]
+2024-10-22 19:25:11,342 INFO: Login attempt for user: testuser1 from IP: 127.0.0.1 User-Agent: curl/8.4.0 [in /Users/kevingerges/Desktop/flaskProject/app.py:303]
+2024-10-22 19:25:11,364 ERROR: Exception on /register [GET] [in /Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/flask/app.py:838]
 Traceback (most recent call last):
   File "/Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/flask/app.py", line 1473, in wsgi_app
     response = self.full_dispatch_request()
@@ -24,49 +58,23 @@ Traceback (most recent call last):
   File "/Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/flask_limiter/extension.py", line 1303, in __inner
     return cast(R, flask.current_app.ensure_sync(obj)(*a, **k))
                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/kevingerges/Desktop/flaskProject/app.py", line 177, in register
-    if User.query.filter_by(name=user).first():
-       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/sqlalchemy/orm/query.py", line 2728, in first
-    return self.limit(1)._iter().first()  # type: ignore
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/sqlalchemy/orm/query.py", line 2827, in _iter
-    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
-                                                  ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
-    return self._execute_internal(
-           ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
-    result: Result[Any] = compile_state_cls.orm_execute_statement(
-                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
-    result = conn.execute(
-             ^^^^^^^^^^^^^
-  File "/Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
-    return meth(
-           ^^^^^
-  File "/Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
-    return connection._execute_clauseelement(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
-    ret = self._execute_context(
-          ^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
-    return self._exec_single_context(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
-    self._handle_dbapi_exception(
-  File "/Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 2355, in _handle_dbapi_exception
-    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
-  File "/Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
-    self.dialect.do_execute(
-  File "/Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
-    cursor.execute(statement, parameters)
-sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such column: users.failed_login_attempts
-[SQL: SELECT users.id AS users_id, users.name AS users_name, users.password AS users_password, users.balance AS users_balance, users.failed_login_attempts AS users_failed_login_attempts, users.last_login_attempt AS users_last_login_attempt, users.account_locked_until AS users_account_locked_until 
-FROM users 
-WHERE users.name = ?
- LIMIT ? OFFSET ?]
-[parameters: ('testuser', 1, 0)]
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2024-10-22 16:56:26,930 INFO: Bank application startup [in /Users/kevingerges/Desktop/flaskProject/app.py:40]
+  File "/Users/kevingerges/Desktop/flaskProject/app.py", line 292, in register
+    return render_template('register.html', form=form)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/flask/templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/flask/templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/jinja2/environment.py", line 1304, in render
+    self.environment.handle_exception()
+  File "/Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/jinja2/environment.py", line 939, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/Users/kevingerges/Desktop/flaskProject/templates/register.html", line 2, in top-level template code
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kevingerges/Desktop/flaskProject/.venv/lib/python3.11/site-packages/jinja2/utils.py", line 83, in from_obj
+    if hasattr(obj, "jinja_pass_arg"):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'csrf_token' is undefined
