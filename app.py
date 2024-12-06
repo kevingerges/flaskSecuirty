@@ -12,18 +12,16 @@ from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
 
-# Configuration
 app.config['SECRET_KEY'] = secrets.token_hex(32)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.instance_path, 'bank.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
-    'pool_size': 10,  # Maximum number of database connections in the pool
-    'max_overflow': 20,  # Maximum number of connections that can be created beyond pool_size
-    'pool_timeout': 30,  # Timeout for getting a connection from the pool
-    'pool_recycle': 1800,  # Recycle connections after 30 minutes
+    'pool_size': 10,
+    'max_overflow': 20, 
+    'pool_timeout': 30, 
+    'pool_recycle': 1800,
 }
 
-# Initialize rate limiter
 limiter = Limiter(
     app=app,
     key_func=get_remote_address,
@@ -31,16 +29,13 @@ limiter = Limiter(
     storage_uri="memory://"
 )
 
-# Ensure instance folder exists
 try:
     os.makedirs(app.instance_path)
 except OSError:
     pass
 
-# Database setup
 db = SQLAlchemy(app)
 
-# Models remain the same as in original code
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -57,11 +52,9 @@ class Transaction(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     ip_address = db.Column(db.String(45))
 
-# Create tables
 with app.app_context():
     db.create_all()
 
-# Helper functions remain the same
 def get_user_from_cookie(request):
     cookie = request.cookies.get('session')
     if not cookie:
@@ -83,7 +76,6 @@ def login_required(f):
         return f(user, *args, **kwargs)
     return decorated
 
-# Modified registration endpoint with rate limiting
 @app.route('/register')
 @app.route('/register.php')
 @limiter.limit("3 per minute", error_message="Too many registration attempts. Please try again later.")
@@ -113,9 +105,8 @@ def register():
         db.session.rollback()
         return jsonify({'error': 'Registration failed'}), 400
     finally:
-        db.session.close()  # Explicitly close the session
+        db.session.close()
 
-# Rest of the routes with added rate limiting
 @app.route('/login')
 @app.route('/login.php')
 @limiter.limit("10 per minute")
